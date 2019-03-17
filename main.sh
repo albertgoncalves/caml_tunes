@@ -20,7 +20,7 @@ compile () {
 
 main () {
     find . -type f -name "*.ml" | lint
-    compile src riemann 0 major 25 1
+    compile src riemann 11 "minor" 25 1
 }
 
 main

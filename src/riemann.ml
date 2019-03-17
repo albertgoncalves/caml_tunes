@@ -7,11 +7,14 @@ module R = Random
 module S = String
 module U = Utils
 
-let int_to_move : (int -> string option) = function
-    | 0 -> Some "P"
-    | 1 -> Some "R"
-    | 2 -> Some "L"
-    | _ -> None
+let int_to_moves : (int -> string option list) = function
+    | 0 -> [Some "P"]
+    | 1 -> [Some "R"]
+    | 2 -> [Some "L"]
+    | 3 -> [Some "P"; Some "L"]
+    | 4 -> [Some "L"; Some "P"; Some "R"] (* LPR = S *)
+    | 5 -> [Some "L"; Some "P"; Some "L"]
+    | _ -> [None]
 
 let move (chord : D.chord) : (string option -> D.chord) = function
     | Some "P" ->
@@ -65,7 +68,10 @@ let ints_to_chords (chord : D.chord) (ns : int list) : D.chord list =
     let rec loop (chord : D.chord) (accu : D.chord list)
         : (int list -> D.chord list) = function
         | (n::ns) ->
-            loop (move chord (int_to_move n) |> D.center) (chord::accu) ns
+            let moves = int_to_moves n in
+            let next_chord =
+                L.fold_left (fun chord m -> move chord m) chord moves in
+            loop (next_chord |> D.center) (chord::accu) ns
         | [] -> (chord::accu) in
     loop chord [] ns
 
@@ -76,7 +82,7 @@ let main () =
     let seed = int_of_string Sys.argv.(4) in
     let ns =
         R.init seed;
-        L.init n (fun _ -> R.int 3) in
+        L.init n (fun _ -> R.int 6) in
     let chord = D.construct root tonality in
     let notes =
         match chord with
