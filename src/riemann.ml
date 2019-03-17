@@ -5,7 +5,6 @@ module L = List
 module P = Printf
 module R = Random
 module S = String
-module U = Utils
 
 let int_to_move : (int -> string option) = function
     | 0 -> Some "P"
