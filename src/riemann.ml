@@ -12,9 +12,12 @@ let int_to_moves : (int -> string option list) = function
     | 1 -> [Some "R"]
     | 2 -> [Some "L"]
     | 3 -> [Some "P"; Some "L"]
-    | 4 -> [Some "L"; Some "P"; Some "R"] (* LPR = S *)
-    | 5 -> [Some "L"; Some "P"; Some "L"]
-    | _ -> [None]
+    | 4 -> [Some "L"; Some "P"]
+    | 5 -> [Some "L"; Some "P"; Some "R"] (* LPR = S *)
+    | 6 -> [Some "L"; Some "P"; Some "L"]
+    | _ -> [None] (* repeat chord *)
+
+let total_moves : int = 8
 
 let move (chord : D.chord) : (string option -> D.chord) = function
     | Some "P" ->
@@ -82,7 +85,7 @@ let main () =
     let seed = int_of_string Sys.argv.(4) in
     let ns =
         R.init seed;
-        L.init n (fun _ -> R.int 6) in
+        L.init n (fun _ -> R.int total_moves) in
     let chord = D.construct root tonality in
     let notes =
         match chord with
