@@ -21,7 +21,6 @@ main () {
     find . -type f -name "*.ml" | lint
     cd src/
     compile
-    cd ../
 }
 
 main
