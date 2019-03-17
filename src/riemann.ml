@@ -106,7 +106,7 @@ let main () =
                     match D.tonality chord with
                         | Some "major" | Some "minor" ->
                             ints_to_chords chord ns
-                            |> L.map D.chord_to_string
+                            |> L.map (D.chord_to_string ~numeric:false)
                             |> U.rev_tab
                             |> S.concat "\n"
                         | Some tonality ->

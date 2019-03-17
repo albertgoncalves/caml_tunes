@@ -65,17 +65,17 @@ let tonality (chord : chord) : string option =
         | (4, 8) -> Some "augmented"
         | _ -> None
 
-let chord_to_string (chord : chord) : string =
-    let note =
-        chord.first
-        |> U.mod12
-        |> note_to_string in
-    let tonality = tonality chord in
-    match (note, tonality) with
-        | (Some note, Some tonality) ->
-            P.sprintf "%s %s" note tonality
-        | _ ->
-            P.sprintf "%d %d %d"
-                chord.first
-                chord.third
-                chord.fifth
+let chord_to_string ?numeric:(numeric=true) (chord : chord) : string =
+    let literal = P.sprintf "%d %d %d" chord.first chord.third chord.fifth in
+    if numeric then
+        literal
+    else
+        let note =
+            chord.first
+            |> U.mod12
+            |> note_to_string in
+        let tonality = tonality chord in
+        match (note, tonality) with
+            | (Some note, Some tonality) ->
+                P.sprintf "%s %s" note tonality
+            | _ -> literal
