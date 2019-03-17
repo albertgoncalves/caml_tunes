@@ -1,4 +1,4 @@
-let mod12 (x : int) : int =
+let mod_12 (x : int) : int =
     x
     |> (fun x -> x mod 12)
     |> begin

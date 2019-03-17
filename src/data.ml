@@ -35,9 +35,9 @@ let construct (first : int) : (string -> chord option) = function
     | _ -> None
 
 let center (chord : chord) : chord =
-    { first = U.mod12 chord.first
-    ; third = U.mod12 chord.third
-    ; fifth = U.mod12 chord.fifth
+    { first = U.mod_12 chord.first
+    ; third = U.mod_12 chord.third
+    ; fifth = U.mod_12 chord.fifth
     }
 
 let note_to_string : (int -> string option) = function
@@ -56,8 +56,8 @@ let note_to_string : (int -> string option) = function
     | _ -> None
 
 let tonality (chord : chord) : string option =
-    let third = chord.third - chord.first |> U.mod12 in
-    let fifth = chord.fifth - chord.first |> U.mod12 in
+    let third = chord.third - chord.first |> U.mod_12 in
+    let fifth = chord.fifth - chord.first |> U.mod_12 in
     match (third, fifth) with
         | (3, 6) -> Some "diminished"
         | (3, 7) -> Some "minor"
@@ -72,7 +72,7 @@ let chord_to_string ?numeric:(numeric=true) (chord : chord) : string =
     else
         let note =
             chord.first
-            |> U.mod12
+            |> U.mod_12
             |> note_to_string in
         let tonality = tonality chord in
         match (note, tonality) with
