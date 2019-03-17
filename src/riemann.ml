@@ -1,36 +1,21 @@
 (* https://en.wikipedia.org/wiki/Neo-Riemannian_theory *)
 
+module D = Data
 module L = List
 module P = Printf
 module R = Random
 module S = String
+module U = Utils
 
-type chord =
-    { first : int
-    ; third : int
-    ; fifth : int
+let center (chord : D.chord) : D.chord =
+    { first = U.mod12 chord.first
+    ; third = U.mod12 chord.third
+    ; fifth = U.mod12 chord.fifth
     }
 
-let mod12 (x : int) : int =
-    x
-    |> (fun x -> x mod 12)
-    |> begin
-        fun x ->
-            if x < 0 then
-                x + 12
-            else
-                x
-    end
-
-let center (chord : chord) : chord =
-    { first = mod12 chord.first
-    ; third = mod12 chord.third
-    ; fifth = mod12 chord.fifth
-    }
-
-let tonality (chord : chord) : string option =
-    let third = chord.third - chord.first |> mod12 in
-    let fifth = chord.fifth - chord.first |> mod12 in
+let tonality (chord : D.chord) : string option =
+    let third = chord.third - chord.first |> U.mod12 in
+    let fifth = chord.fifth - chord.first |> U.mod12 in
     match (third, fifth) with
         | (3, 6) -> Some "diminished"
         | (3, 7) -> Some "minor"
@@ -44,7 +29,7 @@ let int_to_move : (int -> string option) = function
     | 2 -> Some "L"
     | _ -> None
 
-let move (chord : chord) : (string option -> chord) = function
+let move (chord : D.chord) : (string option -> D.chord) = function
     | Some "P" ->
         begin
             match tonality chord with
@@ -107,10 +92,10 @@ let note_to_string : (int -> string option) = function
     | 11 -> Some "B"
     | _ -> None
 
-let chord_to_string (chord : chord) : string =
+let chord_to_string (chord : D.chord) : string =
     let note =
         chord.first
-        |> mod12
+        |> U.mod12
         |> note_to_string in
     let tonality = tonality chord in
     match (note, tonality) with
@@ -122,7 +107,7 @@ let chord_to_string (chord : chord) : string =
                 chord.third
                 chord.fifth
 
-let construct (first : int) : (string -> chord option) = function
+let construct (first : int) : (string -> D.chord option) = function
     | "diminished" ->
         Some
             { first = first
@@ -149,11 +134,12 @@ let construct (first : int) : (string -> chord option) = function
             }
     | _ -> None
 
-let int_to_move (chord : chord) (n : int) : chord = move chord (int_to_move n)
+let int_to_move (chord : D.chord) (n : int) : D.chord =
+    move chord (int_to_move n)
 
-let ints_to_chords (chord : chord) (ns : int list) : chord list =
-    let rec loop (chord : chord) (accu : chord list)
-        : (int list -> chord list) = function
+let ints_to_chords (chord : D.chord) (ns : int list) : D.chord list =
+    let rec loop (chord : D.chord) (accu : D.chord list)
+        : (int list -> D.chord list) = function
         | (n::ns) -> loop (int_to_move chord n) (chord::accu) ns
         | [] -> (chord::accu) in
     loop chord [] ns
