@@ -11,16 +11,15 @@ lint () {
 
 compile () {
     cd $1
-    filename="riemann"
     ocamlfind ocamlopt \
-        -linkpkg -g utils.ml data.ml $filename.ml \
-        -o $filename
-    ./$filename
+        -linkpkg -g utils.ml data.ml $2.ml \
+        -o $2
+    ./$2
 }
 
 main () {
     find . -type f -name "*.ml" | lint
-    compile src/
+    compile src/ riemann
 }
 
 main
