@@ -70,10 +70,13 @@ let ints_to_chords (chord : D.chord) (ns : int list) : D.chord list =
     loop chord [] ns
 
 let main () =
-    let ns = L.init 25 (fun _ -> R.int 3) in
-    let message = "unable to construct initial chord" in
     let root = int_of_string Sys.argv.(1) in
     let tonality = Sys.argv.(2) in
+    let n = int_of_string Sys.argv.(3) in
+    let seed = int_of_string Sys.argv.(4) in
+    let ns =
+        R.init seed;
+        L.init n (fun _ -> R.int 3) in
     let chord = D.construct root tonality in
     let notes =
         match chord with
@@ -89,6 +92,7 @@ let main () =
                             chord.fifth
                 end
             | None -> "unknown notes" in
+    let message = "unable to construct initial chord" in
     let chords =
         match chord with
             | Some chord ->
