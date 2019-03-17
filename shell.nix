@@ -5,7 +5,6 @@ with pkgs; mkShell {
                     ocaml-ng.ocamlPackages_4_07.findlib
                     ocaml-ng.ocamlPackages_4_07.ocp-indent
                     ocaml-ng.ocamlPackages_4_07.utop
-                    jq
                   ];
     shellHook = ''
         if [ $(uname -s) = "Darwin" ]; then
