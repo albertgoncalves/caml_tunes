@@ -10,7 +10,8 @@ lint () {
 }
 
 compile () {
-    cd $1
+    echo "compiling ./$1/$2.ml"
+    cd $1/
     ocamlfind ocamlopt \
         -linkpkg -g utils.ml data.ml $2.ml \
         -o $2
@@ -19,7 +20,7 @@ compile () {
 
 main () {
     find . -type f -name "*.ml" | lint
-    compile src/ riemann
+    compile src riemann
 }
 
 main
