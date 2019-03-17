@@ -8,3 +8,10 @@ let mod12 (x : int) : int =
             else
                 x
     end
+
+let rev_tab (xs : string list) : string list =
+    let tab = "\t" in
+    let rec loop accu = function
+        | (x::xs) -> loop ((tab ^ x)::accu) xs
+        | [] -> accu in
+    loop [] xs

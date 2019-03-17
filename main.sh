@@ -15,12 +15,12 @@ compile () {
     ocamlfind ocamlopt \
         -linkpkg -g utils.ml data.ml $2.ml \
         -o $2
-    ./$2
+    ./$2 $3 $4
 }
 
 main () {
     find . -type f -name "*.ml" | lint
-    compile src riemann
+    compile src riemann 0 major
 }
 
 main

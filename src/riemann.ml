@@ -5,6 +5,7 @@ module L = List
 module P = Printf
 module R = Random
 module S = String
+module U = Utils
 
 let int_to_move : (int -> string option) = function
     | 0 -> Some "P"
@@ -71,24 +72,46 @@ let ints_to_chords (chord : D.chord) (ns : int list) : D.chord list =
 let main () =
     let ns = L.init 25 (fun _ -> R.int 3) in
     let message = "unable to construct initial chord" in
-    D.construct 0 "major"
-    |> begin function
-        | Some chord ->
-            begin
-                match D.tonality chord with
-                    | Some "major" | Some "minor" ->
-                        ints_to_chords chord ns
-                        |> L.map D.chord_to_string
-                        |> L.rev
-                        |> S.concat "\n"
-                    | Some tonality ->
+    let root = int_of_string Sys.argv.(1) in
+    let tonality = Sys.argv.(2) in
+    let chord = D.construct root tonality in
+    let notes =
+        match chord with
+            | Some chord ->
+                chord
+                |> D.center
+                |> begin
+                    fun chord ->
                         P.sprintf
-                            "no progressions prepared for %s chords"
-                            tonality
-                    | _ -> message
-            end
-        | None -> message
-    end
-    |> print_endline
+                            "notes = %d %d %d"
+                            chord.first
+                            chord.third
+                            chord.fifth
+                end
+            | None -> "unknown notes" in
+    let chords =
+        match chord with
+            | Some chord ->
+                begin
+                    match D.tonality chord with
+                        | Some "major" | Some "minor" ->
+                            ints_to_chords chord ns
+                            |> L.map D.chord_to_string
+                            |> U.rev_tab
+                            |> S.concat "\n"
+                        | Some tonality ->
+                            P.sprintf
+                                "no progressions prepared for %s chords"
+                                tonality
+                        | _ -> message
+                end
+            | None -> message in
+    L.iter
+        print_endline
+        [ P.sprintf "./riemann %d %s" root tonality
+        ; notes
+        ; "chords ="
+        ; chords
+        ]
 
 let () = main ()
