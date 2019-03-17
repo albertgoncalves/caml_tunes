@@ -4,7 +4,7 @@ set -e
 
 lint () {
     while read filename; do
-        echo "linting $filename"
+        echo "ocp-indenting $filename"
         ocp-indent -i $filename
     done
 }
