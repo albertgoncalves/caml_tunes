@@ -10,6 +10,7 @@ lint () {
 }
 
 compile () {
+    cd $1
     filename="riemann"
     ocamlfind ocamlopt \
         -linkpkg -g utils.ml data.ml $filename.ml \
@@ -19,8 +20,7 @@ compile () {
 
 main () {
     find . -type f -name "*.ml" | lint
-    cd src/
-    compile
+    compile src/
 }
 
 main
