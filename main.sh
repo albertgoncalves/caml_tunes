@@ -2,7 +2,7 @@
 
 set -e
 
-lint () {
+indent () {
     while read filename; do
         echo "ocp-indenting $filename"
         ocp-indent -i $filename
@@ -19,7 +19,7 @@ compile () {
 }
 
 main () {
-    find . -type f -name "*.ml" | lint
+    find . -type f -name "*.ml" | indent
     compile src riemann 11 "minor" 25 1
 }
 
