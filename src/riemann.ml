@@ -92,7 +92,7 @@ let main () =
             | Some chord ->
                 chord
                 |> D.center
-                |> D.chord_to_string ~numeric:true
+                |> D.chord_to_string
             | None -> "unknown notes" in
     let message = "unable to construct initial chord" in
     let chords =
@@ -102,7 +102,7 @@ let main () =
                     match D.tonality chord with
                         | Some "major" | Some "minor" ->
                             ints_to_chords chord ns
-                            |> L.map D.chord_to_string
+                            |> L.map (D.chord_to_string ~numeric:false)
                             |> U.rev_tab
                             |> S.concat "\n"
                         | Some tonality ->
