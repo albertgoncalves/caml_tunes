@@ -92,14 +92,7 @@ let main () =
             | Some chord ->
                 chord
                 |> D.center
-                |> begin
-                    fun chord ->
-                        P.sprintf
-                            "notes = %d %d %d"
-                            chord.first
-                            chord.third
-                            chord.fifth
-                end
+                |> D.chord_to_string ~numeric:true
             | None -> "unknown notes" in
     let message = "unable to construct initial chord" in
     let chords =
@@ -109,7 +102,7 @@ let main () =
                     match D.tonality chord with
                         | Some "major" | Some "minor" ->
                             ints_to_chords chord ns
-                            |> L.map (D.chord_to_string ~numeric:false)
+                            |> L.map D.chord_to_string
                             |> U.rev_tab
                             |> S.concat "\n"
                         | Some tonality ->
