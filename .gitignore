@@ -1,6 +1,7 @@
 *
 !.gitignore
 !shell.nix
+!main
 !*.ml
 !*.sh
 !.ocp-indent

@@ -20,7 +20,7 @@ compile () {
 
 main () {
     find . -type f -name "*.ml" | indent
-    compile src riemann 11 "minor" 25 1
+    compile src riemann 11 "minor" 25 $1
 }
 
-main
+main $1
