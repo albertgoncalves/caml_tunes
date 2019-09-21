@@ -11,8 +11,8 @@ with pkgs; mkShell {
     ];
     shellHook = ''
         if [ $(uname -s) = "Darwin" ]; then
-            alias ls='ls --color=auto'
-            alias ll='ls -al'
+            alias ls="ls --color=auto"
+            alias ll="ls -al"
         fi
     '';
 }
